@@ -8,8 +8,5 @@ COPY ./tools /var/www/
 
 RUN service mysql start
 RUN mysql < /var/www/initial_db.sql
-RUN rm -f /var/www/initial_db.sql
 
 CMD ["mysqld"]
-
-EXPOSE 3306
