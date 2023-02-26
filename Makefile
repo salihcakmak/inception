@@ -1,6 +1,6 @@
 #This makefile about inception project.
-CONTAINERS	= $(shell docker ps -a)
-IMAGES		= $(shell docker images -a)
+CONTAINERS	= $(shell docker ps -qa)
+IMAGES		= $(shell docker images -qa)
 VOLUMES		= $(shell docker volume ls -q)
 NETWORKS	= $(shell docker network ls -q)
 
@@ -21,22 +21,19 @@ down			:
 				@ docker compose -f srcs/docker-compose.yml down
 
 rm_containers	: down
-				@ docker stop $(CONTAINERS)
-				@ docker rm $(CONTAINERS)
+				@ docker rm -f $(CONTAINERS); true;
 
 rm_images		:
-				@ docker rmi -f $(IMAGES)
+				@ docker rmi -f $(IMAGES); true;
 
 rm_volumes		:
-				@ docker volume rm $(VOLUMES)
+				@ docker volume rm $(VOLUMES); true;
 
 rm_networks		:
 				@ docker network rm $(NETWORKS) 2> /dev/null; true;
 
-prune			:
-				@ docker system prune -a --volume 2> /dev/null;
-				@ docker system prune -a --force 2> /dev/null;
+rm_volume_dir	:
+				@ rm -rf /home/scakmak/data
 
-clean			: rm_containers rm_images rm_networks rm_networks prune
-				@ rm -rf /home/scakmak/data/wordpress
-				@ rm -rf /home/scakmak/data/mariadb
+
+clean			: rm_containers rm_images rm_networks rm_volumes rm_volume_dir

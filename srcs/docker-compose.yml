@@ -12,18 +12,19 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/scakmak/data/wp
+      device: /home/scakmak/data/wordpress
   db:
     driver: local
     name: db_volume
     driver_opts:
       type: none
       o: bind
-      device: /home/scakmak/data/wp
+      device: /home/scakmak/data/mariadb
 
 
 services:
   mariadb:
+    image: mariadb
     container_name: mariadb
     build: ./requirements/mariadb
     ports:
@@ -35,6 +36,7 @@ services:
       - db:/var/lib/mysql
 
   wordpress:
+    image: wordpress
     container_name: wordpress
     build: ./requirements/wordpress
     env_file:
@@ -50,6 +52,7 @@ services:
       - wp:/var/www/html
 
   nginx:
+    image: nginx
     container_name: nginx
     build: ./requirements/nginx
     env_file:
